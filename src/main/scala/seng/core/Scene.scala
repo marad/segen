@@ -1,5 +1,6 @@
 package seng.core
 
+import seng.event.{Event, EntityEvent, GlobalEvent, CreationEvent}
 import seng.core.props.Renderable
 
 class Scene {
@@ -10,6 +11,12 @@ class Scene {
       event match {
         case e: EntityEvent => entities.get(e.toEntity).map(e.perform).getOrElse(List.empty)
         case e: GlobalEvent => e.perform(entities)
+        case e: CreationEvent =>
+          val (newEntities, events) = e.perform
+          newEntities.foreach { entity: Entity =>
+            entities.put(entity.id, entity)
+          }
+          events
       }
     }).flatten
 

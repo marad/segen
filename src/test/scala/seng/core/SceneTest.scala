@@ -4,6 +4,9 @@ import org.mockito.Matchers._
 import org.specs2.mock.Mockito
 import org.specs2.mutable.Specification
 
+import seng.event.{Event, EntityEvent, GlobalEvent, CreationEvent}
+import seng.core.props.{Scale, Rotation, Position, Renderable}
+
 class SceneTest extends Specification with Mockito {
 
   "Scene update" should {
@@ -53,6 +56,23 @@ class SceneTest extends Specification with Mockito {
       there was one(event).perform(scene.entities)
     }
 
+    "handle creation events" in {
+      val entity = mock[Entity]
+      val event = mock [Event]
+      val scene = new Scene
+
+      case class TestEvent() extends CreationEvent {
+        def perform = (List(entity), List(event))
+      }
+
+      entity.id returns 0
+
+      val returnedEvents = scene.update(List(new TestEvent))
+
+      returnedEvents should contain(event)
+      scene.entities should contain((entity.id, entity))
+    }
+
     "throw exception on unsupported event" in {
       case class TestEvent() extends Event
       (new Scene).update(List(new TestEvent)) should throwA()
@@ -61,6 +81,29 @@ class SceneTest extends Specification with Mockito {
 
 
   "Scene render" should {
-    // TODO: implement tests
+
+    "work for empty entity list" in {
+      val scene = new Scene
+      scene.render() should not throwA()
+    }
+
+    "render visible entities and handle non visible entities" in {
+      class TestEntity extends Entity with Renderable {
+        val position: Position = null
+        val rotation: Rotation = null
+        val scale: Scale = null
+        def render() = {}
+      }
+      val visibleEntity = spy(new TestEntity)
+      val notVisibleEntity = spy(new Entity)
+
+      val scene = new Scene
+      scene.entities.put(0, visibleEntity)
+      scene.entities.put(1, notVisibleEntity)
+
+      scene.render()
+
+      there was one(visibleEntity).render()
+    }
   }
 }

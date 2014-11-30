@@ -1,4 +1,5 @@
-import org.lwjgl.Sys
+package seng.gfx.lwjgl
+
 import org.lwjgl.opengl._
 import org.lwjgl.system.glfw._
 
@@ -6,20 +7,12 @@ import org.lwjgl.opengl.GL11._
 import org.lwjgl.system.MemoryUtil._
 import org.lwjgl.system.glfw.GLFW._
 
-class TestApp {
-  var window:Long = NULL
+import seng.gfx.Graphics
 
-  def execute(): Unit = {
-    try {
-      init()
-      loop()
-      glfwDestroyWindow(window)
-    } finally {
-      glfwTerminate()
-    }
-  }
+class LwjglGraphics extends Graphics {
+  var window: Long = NULL
 
-  def init(): Unit = {
+  override def init(width: Int, height: Int, fullscreen: Boolean): Unit = {
     glfwSetErrorCallback(ErrorCallback.Util.getDefault)
 
     if (glfwInit() != GL11.GL_TRUE)
@@ -32,7 +25,7 @@ class TestApp {
     val width = 300
     val height = 300
 
-    window = glfwCreateWindow(width, height, "Hello World", NULL, NULL)
+    window = glfwCreateWindow(width, height, "Seng", NULL, NULL)
     if (window == NULL)
       throw new RuntimeException("Failed to create GLFW window")
 
@@ -54,37 +47,20 @@ class TestApp {
     glfwSwapInterval(1)
 
     glfwShowWindow(window)
-  }
 
-  def loop(): Unit = {
     GLContext.createFromCurrent()
+    glClearColor(0f, 0f, 0f, 1f)
 
-    glClearColor(1f, 0f, 0f, 0f)
 
-    var lastTime: Long = System.currentTimeMillis()
-    var frames = 0
-
-    while(glfwWindowShouldClose(window) == GL_FALSE) {
-
-      val now = System.currentTimeMillis()
-      if (lastTime + 1000 < now) {
-        glfwSetWindowTitle(window, "FPS: " + frames)
-        println("FPS: " + frames)
-        frames = 0
-        lastTime = now
-      }
-
-      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-
-      glfwSwapBuffers(window)
-      glfwPollEvents()
-      frames += 1
-    }
+    // TODO: orthogonal drawing
+    glMatrixMode(GL_PROJECTION)
+    glLoadIdentity()
+    glOrtho(0, width, 0, height, 1, -1)
+    glMatrixMode(GL_MODELVIEW)
   }
-}
 
-object TestApp {
-  def main(args: Array[String]): Unit = {
-    (new TestApp).execute()
-  }
+  override def clear() = glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+  override def swapBuffers() = glfwSwapBuffers(window)
+  override def handleEvents() = glfwPollEvents()
+  override def shouldCloseWindow() = glfwWindowShouldClose(window) == GL_TRUE
 }

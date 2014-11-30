@@ -1,5 +1,6 @@
-package seng.core
+package seng.event
 
+import seng.core.Entity
 import seng.core.props.{Rotatable, Positionable}
 
 trait Event
@@ -13,8 +14,16 @@ trait GlobalEvent extends Event {
   def perform(entities: Entity.Map): List[Event]
 }
 
+trait CreationEvent extends Event {
+  def perform: (List[Entity], List[Event])
+}
+
 trait FromEntityEvent extends Event {
   val fromEntity: Entity.Id
+}
+
+case class CreateEntityEvent(e:Entity) extends CreationEvent {
+  def perform = (List(e), List.empty)
 }
 
 case class MoveEvent(toEntity: Entity.Id, x: Float, y:Float, z:Float) extends EntityEvent {
