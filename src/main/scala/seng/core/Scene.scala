@@ -1,6 +1,6 @@
 package seng.core
 
-import seng.event.{Event, EntityEvent, GlobalEvent, CreationEvent}
+import seng.event._
 import seng.core.props.Renderable
 
 class Scene {
@@ -10,6 +10,7 @@ class Scene {
     (for(event <- eventsToProcess) yield {
       event match {
         case e: EntityEvent => entities.get(e.toEntity).map(e.perform).getOrElse(List.empty)
+        case e: SimpleEvent => e.perform
         case e: GlobalEvent => e.perform(entities)
         case e: CreationEvent =>
           val (newEntities, events) = e.perform

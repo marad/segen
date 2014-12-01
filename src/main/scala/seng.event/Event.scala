@@ -5,6 +5,10 @@ import seng.core.props.{Rotatable, Positionable}
 
 trait Event
 
+trait SimpleEvent extends Event {
+  def perform: (List[Event])
+}
+
 trait EntityEvent extends Event {
   val toEntity: Entity.Id
   def perform(e:Entity) : List[Event]
@@ -17,6 +21,9 @@ trait GlobalEvent extends Event {
 trait CreationEvent extends Event {
   def perform: (List[Entity], List[Event])
 }
+
+
+
 
 trait FromEntityEvent extends Event {
   val fromEntity: Entity.Id
