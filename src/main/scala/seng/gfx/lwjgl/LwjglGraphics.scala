@@ -12,7 +12,7 @@ class LwjglGraphics extends Graphics {
 
 
     Display.create()
-    GL11.glClearColor(1, 1, 1, 1)
+    GL11.glClearColor(0.2f, 0.2f, 0.2f, 1)
 
     GL11.glMatrixMode(GL11.GL_PROJECTION)
     GL11.glLoadIdentity()

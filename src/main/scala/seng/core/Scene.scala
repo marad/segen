@@ -12,12 +12,6 @@ class Scene {
         case e: EntityEvent => entities.get(e.toEntity).map(e.perform).getOrElse(List.empty)
         case e: SimpleEvent => e.perform
         case e: GlobalEvent => e.perform(entities)
-        case e: CreationEvent =>
-          val (newEntities, events) = e.perform
-          newEntities.foreach { entity: Entity =>
-            entities.put(entity.id, entity)
-          }
-          events
       }
     }).flatten
 
