@@ -9,6 +9,7 @@ trait Positionable {
     position.z += z
   }
 
+  def getPosition = position.copy()
   def setPosition(x:Float, y:Float, z:Float) = {
     position.x = x
     position.y = y

@@ -28,4 +28,4 @@ libraryDependencies ++= Seq(
   "org.lwjgl.lwjgl" % "lwjgl-platform" % "2.9.1"
 )
 
-//unmanagedBase := baseDirectory.value / "lib"
+unmanagedBase := baseDirectory.value / "lib"

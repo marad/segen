@@ -1,9 +1,12 @@
-import org.lwjgl.input.Keyboard
+import org.lwjgl.input.{Mouse, Keyboard}
+import org.lwjgl.util.vector.Vector3f
 import seng.core.Entity.Id
 import seng.core.props.{Rotatable, Positionable, Renderable}
 import seng.core.{Entity, Spatial, Game}
 import seng.event._
 import seng.gfx.lwjgl.LwjglGraphics
+import seng.gfx.{Box, Quad, Camera}
+import seng.gfx.VectorMath.wrapper
 
 class GameApp extends Game(new LwjglGraphics) {
 
@@ -72,14 +75,78 @@ class GameApp extends Game(new LwjglGraphics) {
       else List( this )
   }
 
+  case class MoveCamera() extends SimpleEvent {
+
+    override def perform: List[Event] = {
+      val moveSpeed = 0.01f
+      val speed = 0.001f
+
+      if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
+        val pos = new Vector3f()
+        camera.move(camera.getDirection * moveSpeed)
+        dustinCam.translateRelative(0, 0, moveSpeed)
+      }
+      if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
+        camera.move(-camera.getDirection * moveSpeed)
+        dustinCam.translateRelative(0, 0, -moveSpeed)
+      }
+      if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
+        camera.move(-camera.getRight * moveSpeed)
+        dustinCam.translateRelative(moveSpeed, 0, 0)
+      }
+      if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
+        camera.move(camera.getRight * moveSpeed)
+        dustinCam.translateRelative(-moveSpeed, 0, 0)
+      }
+
+      if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) camera.lookAt(0, 0, 0)
+      if (Keyboard.isKeyDown(Keyboard.KEY_BACK)) camera.setPosition(0, 0, 0)
+
+
+      camera.addYaw(moveSpeed * Mouse.getDX)
+      camera.addPitch(moveSpeed * -Mouse.getDY)
+
+      if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
+        camera.addYaw(speed)
+        dustinCam.yaw(speed)
+      }
+
+      if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
+        camera.addYaw(-speed)
+        dustinCam.yaw(-speed)
+      }
+      if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
+        camera.addPitch(speed)
+        dustinCam.pitch(speed)
+      }
+      if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
+        camera.addPitch(-speed)
+        dustinCam.pitch(-speed)
+      }
+      if (Keyboard.isKeyDown(Keyboard.KEY_COMMA)) {
+        camera.addRoll(-speed)
+      }
+      if (Keyboard.isKeyDown(Keyboard.KEY_PERIOD)) {
+        camera.addRoll(speed)
+      }
+
+      List(this)
+    }
+
+  }
+
   def startingEvents() = {
-    val spatial = new Spatial
+    val box = new Spatial(new Box(5f))
+    val quad = new Spatial(new Quad(10f))
+
     List(
-      new CreateEntityEvent(spatial),
-      new ResetPosition(spatial.id),
-      new MoveCharacter(spatial.id),
-      new RotateCharacter(spatial.id),
-      new ResetPositionOnKeyPress(spatial.id, Keyboard.KEY_R)
+      new CreateEntityEvent(box),
+      new CreateEntityEvent(quad),
+//      new ResetPosition(box.id),
+//      new MoveCharacter(box.id),
+//      new RotateCharacter(box.id),
+//      new ResetPositionOnKeyPress(box.id, Keyboard.KEY_R),
+      new MoveCamera
     )
   }
 }

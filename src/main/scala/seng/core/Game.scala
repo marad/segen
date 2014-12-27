@@ -1,12 +1,24 @@
 package seng.core
 
-import org.lwjgl.opengl.{GL11, Display}
+import org.lwjgl.BufferUtils
+import org.lwjgl.opengl._
+import org.lwjgl.util.glu.GLU
+import org.lwjgl.util.vector.Matrix4f
+import org.newdawn.slick.Color
+import org.newdawn.slick.opengl.{TextureLoader, Texture}
+import org.newdawn.slick.util.ResourceLoader
+import seng.core.props.{Rotation, Position}
 import seng.event.Event
-import seng.gfx.Graphics
+import seng.gfx._
+import seng.gfx.lwjgl.{ShaderType, Shader, ShaderProgram}
+import util.{Camera => DustinCam}
 
 abstract class Game(val graphics: Graphics) {
   private var currentScene: Scene = new Scene
   private var events: List[Event] = List.empty
+
+  var camera: Camera = null
+  var dustinCam: DustinCam = new DustinCam()
 
   def getCurrentScene = currentScene
   def setCurrentScene(scene:Scene) = {
@@ -23,6 +35,38 @@ abstract class Game(val graphics: Graphics) {
     var frames = 0
     var lastTime = System.currentTimeMillis()
 
+
+    val shaderProgram = new ShaderProgram
+
+    shaderProgram.attachShader(new Shader(ShaderType.Vertex, "shaders/basic.vert"))
+    shaderProgram.attachShader(new Shader(ShaderType.Fragment, "shaders/basic.frag"))
+
+    shaderProgram.bindAttribute(Mesh.VertexArrayIndex, "position")
+    shaderProgram.bindAttribute(Mesh.ColorArrayIndex, "in_color")
+
+    shaderProgram.build()
+
+    camera = new Camera( width.toFloat / height.toFloat, 45f, 0.1f, 100f )
+    camera.setPosition(0f, 0f, -50f)
+
+    dustinCam.setPosition(0f, 0f, 50f)
+    dustinCam.lookAt(0, 0, 0)
+
+    println("DUSTIN")
+    println(camera.projectionMatrix)
+    println(dustinCam.getViewMatrix)
+
+    val projectionMatrixLocation = shaderProgram.getUniformLocation("projMatrix")
+    val viewMatrixLocation = shaderProgram.getUniformLocation("viewMatrix")
+//    val modelMatrixLocation = shaderProgram.getUniformLocation("modelMatrix")
+
+    val projectionBuffer = BufferUtils.createFloatBuffer(16)
+    val viewBuffer = BufferUtils.createFloatBuffer(16)
+//    val modelBuffer = BufferUtils.createFloatBuffer(16)
+
+
+    val texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("avatar.png"))
+
     while(!graphics.shouldCloseWindow()) {
       events = currentScene.update(events)
 
@@ -35,7 +79,19 @@ abstract class Game(val graphics: Graphics) {
       frames += 1
 
       graphics.clear()
+      shaderProgram.use()
+
+      camera.projectionMatrix.store(projectionBuffer); projectionBuffer.flip()
+//      camera.viewMatrix.invert().store(viewBuffer); viewBuffer.flip()
+      dustinCam.getViewMatrix.store(viewBuffer); viewBuffer.flip()
+
+      GL20.glUniformMatrix4(projectionMatrixLocation, false, projectionBuffer)
+      GL20.glUniformMatrix4(viewMatrixLocation, false, viewBuffer)
+//      GL20.glUniformMatrix4(modelMatrixLocation, false, modelBuffer)
+
       currentScene.render()
+
+      GL20.glUseProgram(0)
       graphics.update()
 
     }

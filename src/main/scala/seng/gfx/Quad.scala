@@ -1,16 +1,17 @@
 package seng.gfx
 
-case class Quad(scale: Float = 1f) extends Mesh(Quad.scaledVertices(scale), Quad.indices)
+class Quad(scale: Float = 1f) extends Mesh(
+  Quad.data.map { v => v.copy( x = v.x*scale, y = v.y*scale, z = v.z*scale ) },
+  Quad.indices)
 
 object Quad {
-  private def vertices: Array[Float] = Array(
-    0.5f,  0.5f,  0.0f,
-    0.5f, -0.5f,  0.0f,
-    -0.5f, -0.5f,  0.0f,
-    -0.5f,  0.5f,  0.0f
+
+  val data = Array(
+    new Vertex( 0.5f,  0.5f, 0f,   1f, 1f, 0f, 1f,   1f, 0f),
+    new Vertex( 0.5f, -0.5f, 0f,   1f, 1f, 0f, 1f,   1f, 1f),
+    new Vertex(-0.5f, -0.5f, 0f,   1f, 1f, 0f, 1f,   0f, 1f),
+    new Vertex(-0.5f,  0.5f, 0f,   1f, 1f, 0f, 1f,   0f, 0f)
   )
 
-  private def indices: Array[Int] = Array( 0, 1, 3, 2, 3, 1 )
-
-  def scaledVertices(scale: Float) = vertices.map { _ * scale }
+  val indices: Array[Int] = Array( 0, 1, 3, 2, 3, 1 )
 }
