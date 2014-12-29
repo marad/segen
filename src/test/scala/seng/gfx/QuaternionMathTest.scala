@@ -23,9 +23,7 @@ class QuaternionMathTest extends Specification {
       val vector = new Vector3f(1, 0, 0)
       val axis = new Vector3f(1, 1, 1)
 
-      println(vector)
       QuaternionMath.rotateVectorAroundAxis(angle, axis, vector)
-      println(vector)
 
       vector.x must be between (-0.3f, 0.3f)
       vector.y must be between (0.8f, 1.2f)

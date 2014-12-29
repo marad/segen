@@ -18,7 +18,6 @@ abstract class Game(val graphics: Graphics) {
   private var events: List[Event] = List.empty
 
   var camera: Camera = null
-  var dustinCam: DustinCam = new DustinCam()
 
   def getCurrentScene = currentScene
   def setCurrentScene(scene:Scene) = {
@@ -49,13 +48,6 @@ abstract class Game(val graphics: Graphics) {
     camera = new Camera( width.toFloat / height.toFloat, 45f, 0.1f, 100f )
     camera.setPosition(0f, 0f, -50f)
 
-    dustinCam.setPosition(0f, 0f, 50f)
-    dustinCam.lookAt(0, 0, 0)
-
-    println("DUSTIN")
-    println(camera.projectionMatrix)
-    println(dustinCam.getViewMatrix)
-
     val projectionMatrixLocation = shaderProgram.getUniformLocation("projMatrix")
     val viewMatrixLocation = shaderProgram.getUniformLocation("viewMatrix")
 //    val modelMatrixLocation = shaderProgram.getUniformLocation("modelMatrix")
@@ -82,8 +74,7 @@ abstract class Game(val graphics: Graphics) {
       shaderProgram.use()
 
       camera.projectionMatrix.store(projectionBuffer); projectionBuffer.flip()
-//      camera.viewMatrix.invert().store(viewBuffer); viewBuffer.flip()
-      dustinCam.getViewMatrix.store(viewBuffer); viewBuffer.flip()
+      camera.viewMatrix.store(viewBuffer); viewBuffer.flip()
 
       GL20.glUniformMatrix4(projectionMatrixLocation, false, projectionBuffer)
       GL20.glUniformMatrix4(viewMatrixLocation, false, viewBuffer)

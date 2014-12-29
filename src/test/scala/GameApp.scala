@@ -84,50 +84,42 @@ class GameApp extends Game(new LwjglGraphics) {
       if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
         val pos = new Vector3f()
         camera.move(camera.getDirection * moveSpeed)
-        dustinCam.translateRelative(0, 0, moveSpeed)
       }
       if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
         camera.move(-camera.getDirection * moveSpeed)
-        dustinCam.translateRelative(0, 0, -moveSpeed)
       }
       if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
         camera.move(-camera.getRight * moveSpeed)
-        dustinCam.translateRelative(moveSpeed, 0, 0)
       }
       if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
         camera.move(camera.getRight * moveSpeed)
-        dustinCam.translateRelative(-moveSpeed, 0, 0)
       }
 
       if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) camera.lookAt(0, 0, 0)
       if (Keyboard.isKeyDown(Keyboard.KEY_BACK)) camera.setPosition(0, 0, 0)
 
 
-      camera.addYaw(moveSpeed * Mouse.getDX)
-      camera.addPitch(moveSpeed * -Mouse.getDY)
+//      camera.addYaw(moveSpeed * Mouse.getDX)
+//      camera.addPitch(moveSpeed * -Mouse.getDY)
 
       if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
-        camera.addYaw(speed)
-        dustinCam.yaw(speed)
+        camera.yaw(-speed)
       }
 
       if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
-        camera.addYaw(-speed)
-        dustinCam.yaw(-speed)
+        camera.yaw(speed)
       }
       if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
-        camera.addPitch(speed)
-        dustinCam.pitch(speed)
+        camera.pitch(-speed)
       }
       if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
-        camera.addPitch(-speed)
-        dustinCam.pitch(-speed)
+        camera.pitch(speed)
       }
       if (Keyboard.isKeyDown(Keyboard.KEY_COMMA)) {
-        camera.addRoll(-speed)
+        camera.roll(-speed)
       }
       if (Keyboard.isKeyDown(Keyboard.KEY_PERIOD)) {
-        camera.addRoll(speed)
+        camera.roll(speed)
       }
 
       List(this)

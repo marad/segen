@@ -13,5 +13,5 @@ object Quad {
     new Vertex(-0.5f,  0.5f, 0f,   1f, 1f, 0f, 1f,   0f, 0f)
   )
 
-  val indices: Array[Int] = Array( 0, 1, 3, 2, 3, 1 )
+  val indices: Array[Int] = Array( 0, 3, 1, 2, 1, 3 )
 }

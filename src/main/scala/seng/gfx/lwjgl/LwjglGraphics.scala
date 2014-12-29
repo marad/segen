@@ -23,14 +23,13 @@ class LwjglGraphics extends Graphics {
     GL11.glClearColor(0.3f, 0.3f, 0.3f, 1)
 
     GL11.glEnable(GL11.GL_DEPTH_TEST)
-//    GL11.glDepthMask(false)
+    GL11.glDepthMask(true)
     GL11.glDepthFunc(GL11.GL_LEQUAL)
-    GL11.glClearDepth(1.0f)
-//    GL11.glDepthRange(0.0, 1.0)
-//    GL11.glEnable(GL32.GL_DEPTH_CLAMP)
+    GL11.glDepthRange(0.0, 1.0)
+    GL11.glEnable(GL32.GL_DEPTH_CLAMP)
 
 //    GL11.glEnable(GL11.GL_CULL_FACE)
-    GL11.glFrontFace(GL11.GL_CW)
+    GL11.glFrontFace(GL11.GL_CCW)
 //    GL11.glCullFace(GL11.GL_BACK)
 
 //    GL11.glEnable(GL11.GL_BLEND)
