@@ -6,15 +6,15 @@ class Box(scale: Float = 1) extends Mesh(
 
 object Box {
   val data = Array(
-    new Vertex( 0.5f,  0.5f, -0.5f,   1f, 0f, 0f, 1f,   1f, 0f),
-    new Vertex( 0.5f, -0.5f, -0.5f,   0f, 1f, 0f, 1f,   1f, 1f),
-    new Vertex(-0.5f, -0.5f, -0.5f,   0f, 0f, 1f, 1f,   0f, 1f),
-    new Vertex(-0.5f,  0.5f, -0.5f,   1f, 1f, 1f, 1f,   0f, 0f),
+    new Vertex( 0.5f,  0.5f, -0.5f,   1f, 1f, -1f,   1f, 0f, 0f, 1f,   1f, 0f),
+    new Vertex( 0.5f, -0.5f, -0.5f,   1f, -1f, -1f,   0f, 1f, 0f, 1f,   1f, 1f),
+    new Vertex(-0.5f, -0.5f, -0.5f,   -1f, -1f, -1f,   0f, 0f, 1f, 1f,   0f, 1f),
+    new Vertex(-0.5f,  0.5f, -0.5f,   -1f, 1f, -1f,   1f, 1f, 1f, 1f,   0f, 0f),
 
-    new Vertex( 0.5f,  0.5f,  0.5f,   1f, 0f, 1f, 1f,   1f, 0f),
-    new Vertex( 0.5f, -0.5f,  0.5f,   1f, 1f, 0f, 1f,   1f, 1f),
-    new Vertex(-0.5f, -0.5f,  0.5f,   0f, 1f, 1f, 1f,   0f, 1f),
-    new Vertex(-0.5f,  0.5f,  0.5f,   1f, 1f, 1f, 1f,   0f, 0f)
+    new Vertex( 0.5f,  0.5f,  0.5f,   1f, 1f, 1f,   1f, 0f, 1f, 1f,   1f, 0f),
+    new Vertex( 0.5f, -0.5f,  0.5f,   1f, -1f, 1f,   1f, 1f, 0f, 1f,   1f, 1f),
+    new Vertex(-0.5f, -0.5f,  0.5f,   -1f, -1f, 1f,   0f, 1f, 1f, 1f,   0f, 1f),
+    new Vertex(-0.5f,  0.5f,  0.5f,   -1f, 1f, 1f,   1f, 1f, 1f, 1f,   0f, 0f)
   )
 
   val indices: Array[Int] = Array(

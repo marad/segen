@@ -1,18 +1,22 @@
 package seng.core.props
 
 trait Positionable {
-  val position: Position
+  protected val _position: Position
 
-  def move(x:Float, y:Float, z:Float) = {
-    position.x += x
-    position.y += y
-    position.z += z
+  def position = _position.copy()
+
+  def position(x:Float, y:Float, z:Float): Unit = {
+    _position.x = x
+    _position.y = y
+    _position.z = z
+    positionUpdated()
+  }
+  def move(x:Float, y:Float, z:Float): Unit = {
+    _position.x += x
+    _position.y += y
+    _position.z += z
+    positionUpdated()
   }
 
-  def getPosition = position.copy()
-  def setPosition(x:Float, y:Float, z:Float) = {
-    position.x = x
-    position.y = y
-    position.z = z
-  }
+  protected def positionUpdated():Unit = {}
 }

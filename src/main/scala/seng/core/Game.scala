@@ -31,6 +31,9 @@ abstract class Game(val graphics: Graphics) {
 
     events = startingEvents()
 
+    camera = new Camera( width.toFloat / height.toFloat, 45f, 0.1f, 100f )
+    camera.position(0f, 0f, -50f)
+
     var frames = 0
     var lastTime = System.currentTimeMillis()
 
@@ -40,21 +43,19 @@ abstract class Game(val graphics: Graphics) {
     shaderProgram.attachShader(new Shader(ShaderType.Vertex, "shaders/basic.vert"))
     shaderProgram.attachShader(new Shader(ShaderType.Fragment, "shaders/basic.frag"))
 
-    shaderProgram.bindAttribute(Mesh.VertexArrayIndex, "position")
+    shaderProgram.bindAttribute(Mesh.VertexArrayIndex, "in_position")
     shaderProgram.bindAttribute(Mesh.ColorArrayIndex, "in_color")
+    shaderProgram.bindAttribute(Mesh.TexCoordArrayIndex, "in_texCoord")
+    shaderProgram.bindAttribute(Mesh.NormalArrayIndex, "in_normal")
 
     shaderProgram.build()
-
-    camera = new Camera( width.toFloat / height.toFloat, 45f, 0.1f, 100f )
-    camera.setPosition(0f, 0f, -50f)
-
-    val projectionMatrixLocation = shaderProgram.getUniformLocation("projMatrix")
-    val viewMatrixLocation = shaderProgram.getUniformLocation("viewMatrix")
-//    val modelMatrixLocation = shaderProgram.getUniformLocation("modelMatrix")
 
     val projectionBuffer = BufferUtils.createFloatBuffer(16)
     val viewBuffer = BufferUtils.createFloatBuffer(16)
 //    val modelBuffer = BufferUtils.createFloatBuffer(16)
+
+    shaderProgram.bindUniformMatrix4Buffer("projMatrix", projectionBuffer)
+    shaderProgram.bindUniformMatrix4Buffer("viewMatrix", viewBuffer)
 
 
     val texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("avatar.png"))
@@ -75,10 +76,6 @@ abstract class Game(val graphics: Graphics) {
 
       camera.projectionMatrix.store(projectionBuffer); projectionBuffer.flip()
       camera.viewMatrix.store(viewBuffer); viewBuffer.flip()
-
-      GL20.glUniformMatrix4(projectionMatrixLocation, false, projectionBuffer)
-      GL20.glUniformMatrix4(viewMatrixLocation, false, viewBuffer)
-//      GL20.glUniformMatrix4(modelMatrixLocation, false, modelBuffer)
 
       currentScene.render()
 

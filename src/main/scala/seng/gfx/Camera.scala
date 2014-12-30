@@ -15,10 +15,10 @@ class Camera(aspectArg:Float, fovArg:Float, zNearArg:Float, zFarArg:Float) {
   private val _projectionMatrix: Matrix4f = new Matrix4f()
   private val _viewMatrix: Matrix4f = new Matrix4f()
 
-  private val position  = new Position(0f, 0f, 0f)
-  private val direction = new Vector3f(0f, 0f, 1f)
-  private val upVector    : Vector3f = new Vector3f(0f, 1f, 0f)
-  private val rightVector : Vector3f = new Vector3f(1f, 0f, 0f)
+  private val _position  = new Position(0f, 0f, 0f)
+  private val _direction = new Vector3f(0f, 0f, 1f)
+  private val _upVector    : Vector3f = new Vector3f(0f, 1f, 0f)
+  private val _rightVector : Vector3f = new Vector3f(1f, 0f, 0f)
 
   private var viewMatrixNeedsUpdate: Boolean = true
 
@@ -44,73 +44,87 @@ class Camera(aspectArg:Float, fovArg:Float, zNearArg:Float, zFarArg:Float) {
   private def invalidateViewMatrix() = viewMatrixNeedsUpdate = true
 
   def updateViewMatrix(): Unit = {
-    Vector3f.cross(MathHelpers.upVector, direction, rightVector).normalise(rightVector)
-    Vector3f.cross(direction, rightVector, upVector).normalise(upVector)
-
     _viewMatrix.setIdentity()
-    _viewMatrix.m00 = rightVector.x
-    _viewMatrix.m01 = rightVector.y
-    _viewMatrix.m02 = rightVector.z
-    _viewMatrix.m10 = upVector.x
-    _viewMatrix.m11 = upVector.y
-    _viewMatrix.m12 = upVector.z
-    _viewMatrix.m20 = -direction.x
-    _viewMatrix.m21 = -direction.y
-    _viewMatrix.m22 = -direction.z
+    _viewMatrix.m00 = _rightVector.x
+    _viewMatrix.m01 = _rightVector.y
+    _viewMatrix.m02 = _rightVector.z
+    _viewMatrix.m10 = _upVector.x
+    _viewMatrix.m11 = _upVector.y
+    _viewMatrix.m12 = _upVector.z
+    _viewMatrix.m20 = -_direction.x
+    _viewMatrix.m21 = -_direction.y
+    _viewMatrix.m22 = -_direction.z
 
-    _viewMatrix.translate(new Vector3f(-position.x, -position.y, -position.z))
+    _viewMatrix.translate(new Vector3f(-_position.x, -_position.y, -_position.z))
     viewMatrixNeedsUpdate = false
   }
 
-  def getPosition = position.copy()
-  def setPosition(x:Float, y:Float, z:Float): Unit = {
-    position.x = x
-    position.y = y
-    position.z = z
+  def position = _position.copy()
+  def position(x:Float, y:Float, z:Float): Position = {
+    _position.x = x
+    _position.y = y
+    _position.z = z
     invalidateViewMatrix()
+    
+    position
   }
 
   def move(vector:Vector3f): Unit = move(vector.x, vector.y, vector.z)
   def move(x:Float, y:Float, z:Float): Unit = {
-    position.x += x
-    position.y += y
-    position.z += z
+    _position.x += x
+    _position.y += y
+    _position.z += z
     invalidateViewMatrix()
   }
 
+  def moveRelative(vector: Vector3f): Unit = moveRelative(vector.x, vector.y, vector.z)
+  def moveRelative(x:Float, y:Float, z:Float): Unit = {
+    _position.x += x * _direction.x
+    _position.y += y * _direction.y
+    _position.z += z * _direction.z
+    invalidateViewMatrix()
+  }
 
-  def getUp = new Vector3f(upVector.x, upVector.y, upVector.z)
-  def getRight = new Vector3f(rightVector.x, rightVector.y, rightVector.z)
+  def up = new Vector3f(_upVector.x, _upVector.y, _upVector.z)
+  def right = new Vector3f(_rightVector.x, _rightVector.y, _rightVector.z)
 
-  def getDirection = new Vector3f(direction.x, direction.y, direction.z)
-  def setDirection(x:Float, y:Float, z:Float): Unit = {
-    direction.x = x
-    direction.y = y
-    direction.z = z
-    updateViewMatrix()
+  def direction = new Vector3f(_direction.x, _direction.y, _direction.z)
+  def direction(x:Float, y:Float, z:Float): Vector3f = {
+    _direction.x = x
+    _direction.y = y
+    _direction.z = z
+    invalidateViewMatrix()
+
+    direction
   }
 
   def lookAt(x:Float, y:Float, z:Float): Unit = {
-    direction.x = x - position.x
-    direction.y = y - position.y
-    direction.z = z - position.z
-    direction.normalise(direction)
+    _direction.x = x - _position.x
+    _direction.y = y - _position.y
+    _direction.z = z - _position.z
+    _direction.normalise(_direction)
+
+    Vector3f.cross(MathHelpers.upVector, _direction, _rightVector).normalise(_rightVector)
+    Vector3f.cross(_direction, _rightVector, _upVector).normalise(_upVector)
+
     invalidateViewMatrix()
   }
 
   def yaw(yaw:Float): Unit = {
-    QuaternionMath.rotateVectorAroundAxis(yaw, MathHelpers.upVector, direction)
+    QuaternionMath.rotateVectorAroundAxis(yaw, _upVector, _direction)
+    Vector3f.cross(_upVector, _direction, _rightVector).normalise(_rightVector)
     invalidateViewMatrix()
   }
 
   def pitch(pitch:Float): Unit = {
-    QuaternionMath.rotateVectorAroundAxis(pitch, rightVector, direction)
-    println(direction)
+    QuaternionMath.rotateVectorAroundAxis(pitch, _rightVector, _direction)
+    Vector3f.cross(_direction, _rightVector, _upVector).normalise(_upVector)
     invalidateViewMatrix()
   }
 
   def roll(roll:Float): Unit = {
-    QuaternionMath.rotateVectorAroundAxis(roll, direction, upVector)
+    QuaternionMath.rotateVectorAroundAxis(roll, _direction, _upVector)
+    Vector3f.cross(_upVector, _direction, _rightVector).normalise(_rightVector)
     invalidateViewMatrix()
   }
 }

@@ -1,8 +1,10 @@
 package seng.gfx.lwjgl
 
-import org.lwjgl.BufferUtils
+import java.nio.FloatBuffer
+
 import org.lwjgl.opengl.{GL11, GL20}
 import org.lwjgl.util.glu.GLU
+import org.lwjgl.util.vector.Matrix4f
 import seng.gfx.lwjgl.ShaderType.ShaderType
 import scala.collection.mutable
 import scala.io.Source
@@ -24,14 +26,7 @@ case class Shader(shaderType: ShaderType, resourcePath: String) {
     GL20.glShaderSource(shaderId, source)
     GL20.glCompileShader(shaderId)
     if (GL20.glGetShaderi(shaderId, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE) {
-      val infoLogLength = BufferUtils.createIntBuffer(1)
-      val len = GL20.glGetShaderi(shaderId, GL20.GL_INFO_LOG_LENGTH)
-
-      val buffer = BufferUtils.createByteBuffer(len)
-      GL20.glGetShaderInfoLog(shaderId, infoLogLength, buffer)
-      println("Error: '" + GL20.glGetShaderInfoLog(shaderId, 500) + "'")
-    } else {
-      println("Loaded shader " + resourcePath)
+      System.err.println("Error: '" + GL20.glGetShaderInfoLog(shaderId, 500) + "'")
     }
   }
   
@@ -51,6 +46,7 @@ case class Shader(shaderType: ShaderType, resourcePath: String) {
 class ShaderProgram {
   val programId = GL20.glCreateProgram()
   val attachedShaders = new mutable.MutableList[Shader]
+  val uniformMatrices4 = new mutable.HashMap[Int, FloatBuffer]
 
   def attachShader(shader: Shader): Unit = {
     GL20.glAttachShader(programId, shader.shaderId)
@@ -73,13 +69,20 @@ class ShaderProgram {
 
   def use(): Unit = {
     GL20.glUseProgram(programId)
+
+    for ((location, buffer) <- uniformMatrices4) {
+      GL20.glUniformMatrix4(location, false, buffer)
+    }
   }
 
   def delete(): Unit = {
     GL20.glDeleteProgram(programId)
   }
 
-  def getUniformLocation(name: String): Int = GL20.glGetUniformLocation(programId, name)
+  def bindUniformMatrix4Buffer(name: String, matrixBuffer: FloatBuffer) = {
+    val location = GL20.glGetUniformLocation(programId, name)
+    uniformMatrices4(location) = matrixBuffer
+  }
 
   override def finalize(): Unit = {
     try {

@@ -1,17 +1,23 @@
 package seng.core.props
 
 trait Rotatable {
-  val rotation: Rotation
+  protected val _rotation: Rotation
 
-  def rotate(x: Float, y:Float, z:Float) = {
-    rotation.x += x
-    rotation.y += y
-    rotation.z += z
+  def rotation: Rotation = _rotation.copy()
+
+  def rotation(x:Float, y:Float, z:Float):Unit = {
+    _rotation.x = x
+    _rotation.y = y
+    _rotation.z = z
+    rotationUpdated()
   }
 
-  def setRotation(x:Float, y:Float, z:Float) = {
-    rotation.x = x
-    rotation.y = y
-    rotation.z = z
+  def rotate(x: Float, y:Float, z:Float):Unit = {
+    _rotation.x += x
+    _rotation.y += y
+    _rotation.z += z
+    rotationUpdated()
   }
+
+  protected def rotationUpdated(): Unit = {}
 }

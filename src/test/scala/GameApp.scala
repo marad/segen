@@ -61,8 +61,8 @@ class GameApp extends Game(new LwjglGraphics) {
     override def perform(entity: Entity): List[Event] = {
       entity match {
         case e: Entity with Positionable with Rotatable =>
-          e.setPosition(0f, 0f, 0f)
-          e.setRotation(0f, 0f, 0f)
+          e.position(0f, 0f, 0f)
+          e.position(0f, 0f, 0f)
       }
       List.empty
     }
@@ -83,20 +83,20 @@ class GameApp extends Game(new LwjglGraphics) {
 
       if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
         val pos = new Vector3f()
-        camera.move(camera.getDirection * moveSpeed)
+        camera.move(camera.direction * moveSpeed)
       }
       if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
-        camera.move(-camera.getDirection * moveSpeed)
+        camera.move(-camera.direction * moveSpeed)
       }
       if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
-        camera.move(-camera.getRight * moveSpeed)
+        camera.move(-camera.right * moveSpeed)
       }
       if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-        camera.move(camera.getRight * moveSpeed)
+        camera.move(camera.right * moveSpeed)
       }
 
       if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) camera.lookAt(0, 0, 0)
-      if (Keyboard.isKeyDown(Keyboard.KEY_BACK)) camera.setPosition(0, 0, 0)
+      if (Keyboard.isKeyDown(Keyboard.KEY_BACK)) camera.position(0, 0, 0)
 
 
 //      camera.addYaw(moveSpeed * Mouse.getDX)
@@ -134,6 +134,7 @@ class GameApp extends Game(new LwjglGraphics) {
     List(
       new CreateEntityEvent(box),
       new CreateEntityEvent(quad),
+      new CreateEntityEvent(new Spatial(new Box(120f))),
 //      new ResetPosition(box.id),
 //      new MoveCharacter(box.id),
 //      new RotateCharacter(box.id),

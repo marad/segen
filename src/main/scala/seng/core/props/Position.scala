@@ -1,4 +1,8 @@
 package seng.core.props
 
-case class Position(var x:Float, var y:Float, var z:Float)
+import org.lwjgl.util.vector.Vector3f
+
+case class Position(var x:Float, var y:Float, var z:Float) {
+  def asVector = new Vector3f(x, y, z)
+}
 

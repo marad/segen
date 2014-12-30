@@ -7,10 +7,10 @@ class Quad(scale: Float = 1f) extends Mesh(
 object Quad {
 
   val data = Array(
-    new Vertex( 0.5f,  0.5f, 0f,   1f, 1f, 0f, 1f,   1f, 0f),
-    new Vertex( 0.5f, -0.5f, 0f,   1f, 1f, 0f, 1f,   1f, 1f),
-    new Vertex(-0.5f, -0.5f, 0f,   1f, 1f, 0f, 1f,   0f, 1f),
-    new Vertex(-0.5f,  0.5f, 0f,   1f, 1f, 0f, 1f,   0f, 0f)
+    new Vertex( 0.5f,  0.5f, 0f,   0f, 0f, -1f,   1f, 1f, 0f, 1f,   1f, 0f),
+    new Vertex( 0.5f, -0.5f, 0f,   0f, 0f, -1f,   1f, 1f, 0f, 1f,   1f, 1f),
+    new Vertex(-0.5f, -0.5f, 0f,   0f, 0f, -1f,   1f, 1f, 0f, 1f,   0f, 1f),
+    new Vertex(-0.5f,  0.5f, 0f,   0f, 0f, -1f,   1f, 1f, 0f, 1f,   0f, 0f)
   )
 
   val indices: Array[Int] = Array( 0, 3, 1, 2, 1, 3 )

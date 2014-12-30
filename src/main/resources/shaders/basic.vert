@@ -2,14 +2,16 @@
 
 uniform mat4 viewMatrix, projMatrix;
 
-in vec3 position;
+in vec3 in_position;
+in vec3 in_normal;
 in vec4 in_color;
 
-out vec4 color;
+out vec4 pass_color;
 
 void main(void) {
-    color = in_color;
-    gl_Position = projMatrix * viewMatrix * vec4(position, 1.0);
-    //gl_Position = viewMatrix * projMatrix * vec4(position, 1.0);
-    //gl_Position = vec4(position, 1.0);
+    pass_color = in_color;
+    //pass_color = vec4(in_normal, 1);
+    gl_Position = projMatrix * viewMatrix * vec4(in_position, 1.0);
+    //gl_Position = viewMatrix * projMatrix * vec4(in_position, 1.0);
+    //gl_Position = vec4(in_position, 1.0);
 }

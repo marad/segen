@@ -72,11 +72,12 @@ class SceneTest extends Specification with Mockito {
 
     "render visible entities and handle non visible entities" in {
       class TestEntity extends Entity with Renderable {
-        val position: Position = null
-        val rotation: Rotation = null
-        val scale: Scale = null
+        protected val _position: Position = null
+        protected val _rotation: Rotation = null
+        protected val _scale: Scale = null
         def render() = {}
       }
+
       val visibleEntity = spy(new TestEntity)
       val notVisibleEntity = spy(new Entity)
 
