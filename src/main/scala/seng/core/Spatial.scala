@@ -9,17 +9,22 @@ import seng.gfx.{MathHelpers, Mesh}
 
 class Spatial(val mesh: Mesh) extends Entity with Renderable {
   private var modelMatrixNeedsUpdate: Boolean = true
-  private val modelMatrixBuffer: FloatBuffer = BufferUtils.createFloatBuffer(16)
 
   protected val _position: Position = new Position(0f, 0f, 0f)
   protected val _rotation: Rotation = new Rotation(0f, 0f, 0f)
   protected val _scale: Scale = new Scale(1f, 1f, 1f)
 
   private val _modelMatrix = new Matrix4f()
+  private val _modelMatrixBuffer: FloatBuffer = BufferUtils.createFloatBuffer(16)
 
-  def modelMatrix = {
+  def modelMatrix:Matrix4f = {
     if (modelMatrixNeedsUpdate) updateModelMatrix()
     _modelMatrix
+  }
+
+  def modelMatrixBuffer:FloatBuffer = {
+    if (modelMatrixNeedsUpdate) updateModelMatrix()
+    _modelMatrixBuffer
   }
 
   protected override def positionUpdated() = invalidateModelMatrix()
@@ -39,8 +44,8 @@ class Spatial(val mesh: Mesh) extends Entity with Renderable {
     _modelMatrix.rotate(_rotation.x, MathHelpers.upVector)
     _modelMatrix.translate(position.asVector)
 
-    _modelMatrix.store(modelMatrixBuffer)
-    modelMatrixBuffer.flip()
+    _modelMatrix.store(_modelMatrixBuffer)
+    _modelMatrixBuffer.flip()
 
     modelMatrixNeedsUpdate = false
   }
