@@ -1,11 +1,11 @@
-package seng.gfx.lwjgl
+package seng.gfx
 
 import java.nio.FloatBuffer
 
 import org.lwjgl.opengl.{GL11, GL20}
 import org.lwjgl.util.glu.GLU
-import org.lwjgl.util.vector.Matrix4f
-import seng.gfx.lwjgl.ShaderType.ShaderType
+import seng.gfx.ShaderType.ShaderType
+
 import scala.collection.mutable
 import scala.io.Source
 
@@ -90,6 +90,5 @@ class ShaderProgram {
     } finally {
       super.finalize()
     }
-
   }
 }

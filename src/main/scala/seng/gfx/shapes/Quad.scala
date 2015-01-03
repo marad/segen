@@ -1,4 +1,6 @@
-package seng.gfx
+package seng.gfx.shapes
+
+import seng.gfx.{Mesh, Vertex}
 
 class Quad(scale: Float = 1f) extends Mesh(
   Quad.data.map { v => v.copy( x = v.x*scale, y = v.y*scale, z = v.z*scale ) },

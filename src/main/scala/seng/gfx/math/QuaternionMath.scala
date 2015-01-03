@@ -1,6 +1,6 @@
-package seng.gfx
+package seng.gfx.math
 
-import org.lwjgl.util.vector.{Vector3f, Quaternion}
+import org.lwjgl.util.vector.{Quaternion, Vector3f}
 
 class QuaternionMath(q: Quaternion) {
   def * (r: Quaternion) = Quaternion.mul(q, r, null)

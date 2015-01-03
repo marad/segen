@@ -1,3 +1,5 @@
+package seng;
+
 import org.lwjgl.input.{Mouse, Keyboard}
 import org.lwjgl.util.vector.Vector3f
 import seng.core.Entity.Id
@@ -5,8 +7,10 @@ import seng.core.props.{Rotatable, Positionable, Renderable}
 import seng.core.{Entity, Spatial, Game}
 import seng.event._
 import seng.gfx.lwjgl.LwjglGraphics
-import seng.gfx.{Box, Quad, Camera}
-import seng.gfx.VectorMath.wrapper
+import seng.gfx.math.VectorMath
+import seng.gfx.shapes.{Quad, Box}
+import seng.gfx.Camera
+import VectorMath.wrapper
 
 class GameApp extends Game(new LwjglGraphics) {
 

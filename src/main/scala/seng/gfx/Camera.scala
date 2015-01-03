@@ -2,7 +2,8 @@ package seng.gfx
 
 import org.lwjgl.util.vector.{Quaternion, Matrix4f, Vector3f}
 import seng.core.props.Position
-import seng.gfx.QuaternionMath.wrapper
+import seng.gfx.math.{MathHelpers, QuaternionMath}
+import QuaternionMath.wrapper
 
 import rx.{Rx, Var}
 

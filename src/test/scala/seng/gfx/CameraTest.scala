@@ -2,6 +2,7 @@ package seng.gfx
 
 import org.lwjgl.util.vector.{Vector3f}
 import org.specs2.mutable.Specification
+import seng.gfx.math.MathHelpers
 
 import scala.util.Random
 

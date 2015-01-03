@@ -2,6 +2,7 @@ package seng.gfx
 
 import org.lwjgl.util.vector.{Quaternion, Vector3f}
 import org.specs2.mutable.Specification
+import seng.gfx.math.QuaternionMath
 
 class QuaternionMathTest extends Specification {
 

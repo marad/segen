@@ -5,7 +5,8 @@ import java.nio.FloatBuffer
 import org.lwjgl.BufferUtils
 import org.lwjgl.util.vector.Matrix4f
 import seng.core.props.{Position, Renderable, Rotation, Scale}
-import seng.gfx.{MathHelpers, Mesh}
+import seng.gfx.Mesh
+import seng.gfx.math.MathHelpers
 
 class Spatial(val mesh: Mesh) extends Entity with Renderable {
   private var modelMatrixNeedsUpdate: Boolean = true

@@ -1,4 +1,6 @@
-package seng.gfx
+package seng.gfx.shapes
+
+import seng.gfx.{Mesh, Vertex}
 
 class Box(scale: Float = 1) extends Mesh(
   Box.data.map { v => v.copy( x = v.x*scale, y = v.y*scale, z = v.z*scale ) },

@@ -2,16 +2,11 @@ package seng.core
 
 import org.lwjgl.BufferUtils
 import org.lwjgl.opengl._
-import org.lwjgl.util.glu.GLU
-import org.lwjgl.util.vector.Matrix4f
-import org.newdawn.slick.Color
-import org.newdawn.slick.opengl.{TextureLoader, Texture}
+import org.newdawn.slick.opengl.TextureLoader
 import org.newdawn.slick.util.ResourceLoader
-import seng.core.props.{Rotation, Position}
 import seng.event.Event
 import seng.gfx._
-import seng.gfx.lwjgl.{ShaderType, Shader, ShaderProgram}
-import util.{Camera => DustinCam}
+import seng.gfx.Shader
 
 abstract class Game(val graphics: Graphics) {
   private var currentScene: Scene = new Scene

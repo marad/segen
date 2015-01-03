@@ -4,6 +4,11 @@ version := "1.0"
 
 scalaVersion := "2.11.4"
 
+mainClass in (Compile, run) := Some("seng.GameApp")
+
+javaOptions in run += "-Djava.library.path=lib/natives"
+
+
 //resolvers += "Scalaz Bintray Repo"  at "http://dl.bintray.com/scalaz/releases"
 
 resolvers ++= Seq("snapshots", "releases").map(Resolver.sonatypeRepo)
@@ -29,3 +34,6 @@ libraryDependencies ++= Seq(
 )
 
 unmanagedBase := baseDirectory.value / "lib"
+
+
+fork in run := true

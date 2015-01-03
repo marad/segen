@@ -1,4 +1,4 @@
-package seng.gfx
+package seng.gfx.math
 
 import org.lwjgl.util.vector.Vector3f
 
