@@ -5,17 +5,13 @@ trait Rotatable {
 
   def rotation: Rotation = _rotation.copy()
 
-  def rotation(x:Float, y:Float, z:Float):Unit = {
-    _rotation.x = x
-    _rotation.y = y
-    _rotation.z = z
+  def rotation(angle:Float):Unit = {
+    _rotation.angle = angle
     rotationUpdated()
   }
 
-  def rotate(x: Float, y:Float, z:Float):Unit = {
-    _rotation.x += x
-    _rotation.y += y
-    _rotation.z += z
+  def rotate(angle: Float):Unit = {
+    _rotation.angle += angle
     rotationUpdated()
   }
 

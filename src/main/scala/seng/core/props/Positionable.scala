@@ -5,16 +5,14 @@ trait Positionable {
 
   def position = _position.copy()
 
-  def position(x:Float, y:Float, z:Float): Unit = {
+  def position(x:Float, y:Float): Unit = {
     _position.x = x
     _position.y = y
-    _position.z = z
     positionUpdated()
   }
-  def move(x:Float, y:Float, z:Float): Unit = {
+  def move(x:Float, y:Float): Unit = {
     _position.x += x
     _position.y += y
-    _position.z += z
     positionUpdated()
   }
 
