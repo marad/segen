@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.backends.lwjgl.{LwjglApplication, LwjglApplicationConfiguration}
 import com.badlogic.gdx.graphics.g2d.{BitmapFont, Sprite}
 import com.badlogic.gdx.graphics.{Color, Texture}
-import seng.event.{CreateEntityEvent, Event}
+import seng.event.{SimpleEvent, CreateEntityEvent, Event}
 import seng.gfx.SpriteEntity
 
 import scala.collection.mutable
@@ -15,23 +15,25 @@ class GameApp extends Game {
   private var sprite: Sprite = null
 
   private val spriteList = new mutable.MutableList[Sprite]()
-  private val movers = new mutable.MutableList[SpriteMover]()
 
-  class SpriteMover(val sprite: Sprite) {
+  class SpriteMoveEvent(val sprite: Sprite) extends SimpleEvent {
     var dx = 1f
     var dy = 1f
 
     var speed = 0.3f
 
-    def update(delta: Float): Unit = {
+    override def perform: List[Event] = {
       if (sprite.getX < 0) dx = 1
       if (sprite.getX + sprite.getWidth > 640) dx = -1
       if (sprite.getY < 0) dy = 1
       if (sprite.getY + sprite.getHeight > 480) dy = -1
 
-      sprite.translateX(dx * delta * speed)
-      sprite.translateY(dy * delta * speed)
+      sprite.translateX(dx * speed)
+      sprite.translateY(dy * speed)
+      
+      List(this)
     }
+    
   }
   override def createEvents(): List[Event] = {
     font = new BitmapFont()
@@ -40,22 +42,25 @@ class GameApp extends Game {
     texture = new Texture(Gdx.files.internal("avatar.png"))
     sprite = new Sprite(texture)
 
-//    val plBall = new Texture(Gdx.files.internal("ru.png"))
-//    val random = new scala.util.Random()
-//    (1 to 100).foreach { index =>
-//      val sprite = new Sprite(plBall)
-//      val mover = new SpriteMover(sprite)
-//      sprite.setX(random.nextInt(640))
-//      sprite.setY(random.nextInt(480))
-//      mover.dx = if (random.nextBoolean()) 1 else -1
-//      mover.dy = if (random.nextBoolean()) 1 else -1
-//      spriteList += sprite
-//      movers += mover
-//    }
+    val events = new mutable.MutableList[Event]()
 
-    List(
-      new CreateEntityEvent(new SpriteEntity(sprite))
-    )
+    events += new CreateEntityEvent(new SpriteEntity(sprite))
+
+    val plBall = new Texture(Gdx.files.internal("pl.png"))
+    val random = new scala.util.Random()
+    (1 to 100).foreach { index =>
+      val sprite = new Sprite(plBall)
+      val mover = new SpriteMoveEvent(sprite)
+      sprite.setX(random.nextInt(640))
+      sprite.setY(random.nextInt(480))
+      mover.dx = if (random.nextBoolean()) 1 else -1
+      mover.dy = if (random.nextBoolean()) 1 else -1
+
+      events += new CreateEntityEvent(new SpriteEntity(sprite))
+      events += mover
+    }
+
+    events
   }
 
   override def dispose(): Unit = {
