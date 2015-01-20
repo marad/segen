@@ -1,7 +1,7 @@
 package seng.core
 
 import seng.event._
-import seng.core.props.Renderable
+import seng.core.props.{RenderInfo, Renderable}
 
 class Scene {
   val entities = new Entity.Map()
@@ -15,9 +15,9 @@ class Scene {
       }
     }).flatten
 
-  def render() = for((_, entity) <- entities) {
+  def render(renderInfo: RenderInfo) = for((_, entity) <- entities) {
     entity match {
-      case e: Entity with Renderable => e.render()
+      case e: Entity with Renderable => e.render(renderInfo)
       case _ =>
     }
   }

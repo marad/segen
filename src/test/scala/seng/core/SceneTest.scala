@@ -3,9 +3,12 @@ package seng.core
 import org.mockito.Matchers._
 import org.specs2.mock.Mockito
 import org.specs2.mutable.Specification
+import seng.core.Entity.Id
 
 import seng.event.{Event, EntityEvent, GlobalEvent}
-import seng.core.props.{Scale, Rotation, Position, Renderable}
+import seng.core.props.{RenderInfo, Renderable}
+
+import scala.collection.mutable
 
 class SceneTest extends Specification with Mockito {
 
@@ -67,25 +70,40 @@ class SceneTest extends Specification with Mockito {
 
     "work for empty entity list" in {
       val scene = new Scene
-      scene.render() should not throwA()
+      scene.render(null) should not throwA()
     }
 
     "render visible entities and handle non visible entities" in {
       class TestEntity extends Entity with Renderable {
-        protected val _position: Position = null
-        protected val _rotation: Rotation = null
-        protected val _scale: Scale = null
         def render() = {}
+
+        override val id: Id = ???
+        override val properties: mutable.AnyRefMap[String, String] = ???
+        override def render(renderInfo: RenderInfo): Unit = ???
+        override def sy(y: Float): Unit = ???
+        override def sy: Float = ???
+        override def sx(x: Float): Unit = ???
+        override def sx: Float = ???
+        override def scale(x: Float, y: Float): Unit = ???
+        override def move(x: Float, y: Float): Unit = ???
+        override def position(x: Float, y: Float): Unit = ???
+        override def y(y: Float): Unit = ???
+        override def y: Float = ???
+        override def x(x: Float): Unit = ???
+        override def x: Float = ???
+        override def rotate(angle: Float): Unit = ???
+        override def rotation(angle: Float): Unit = ???
+        override def rotation: Float = ???
       }
 
       val visibleEntity = spy(new TestEntity)
-      val notVisibleEntity = spy(new Entity)
+      val notVisibleEntity = spy(new SimpleEntity)
 
       val scene = new Scene
       scene.entities.put(0, visibleEntity)
       scene.entities.put(1, notVisibleEntity)
 
-      scene.render()
+      scene.render(null)
 
       there was one(visibleEntity).render()
     }

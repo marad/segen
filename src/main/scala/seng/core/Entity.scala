@@ -2,9 +2,9 @@ package seng.core
 
 import collection.mutable
 
-class Entity {
-  val id: Entity.Id = Entity.generateNextId()
-  val properties = new mutable.AnyRefMap[String, String]()
+trait Entity {
+  val id: Entity.Id
+  val properties: mutable.AnyRefMap[String, String]
 }
 
 object Entity {
@@ -12,8 +12,8 @@ object Entity {
   type Map = mutable.HashMap[Entity.Id, Entity]
 
   private var lastId: Entity.Id = 0L
-  def generateNextId(): Entity.Id = {
+  def generateNextId(): Entity.Id = this.synchronized {
     lastId += 1
-    return lastId
+    lastId
   }
 }
